@@ -6,4 +6,4 @@ resources:
   - cloudflare.yaml
   # - kcon-secret.yaml
   - cloudflare-secret.yaml
-  - linkding-container-env
+  - linkding-container-env-secret.yaml
