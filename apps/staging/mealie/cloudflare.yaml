@@ -68,7 +68,7 @@ data:
   config.yaml: |
     # Name of the tunnel you want to run
     
-    tunnel: ldk8s
+    tunnel: mealie
 
     credentials-file: /etc/cloudflared/creds/credentials.json
 
@@ -77,8 +77,8 @@ data:
     no-autoupdate: true
 
     ingress:
-    - hostname: ldk8s.williamveale.net
-      service: http://linkding:9090
+    - hostname: mealie.williamveale.net
+      service: http://mealie:9000
 
     # This rule sends traffic to the built-in hello-world HTTP server. This can help debug connectivity
     # issues. If hello.example.com resolves and tunnel.example.com does not, then the problem is
