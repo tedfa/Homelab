@@ -30,4 +30,7 @@ spec:
           kind: PrometheusRule
   values:
     grafana:
-      adminPassword: mischa
+      admin:
+        existingSecret: grafana-env-secret
+        userKey: admin-user
+        passwordKey: admin-password
