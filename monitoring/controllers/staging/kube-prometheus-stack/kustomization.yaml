@@ -5,3 +5,4 @@ resources:
   - ../../base/kube-prometheus-stack/
   - cloudflare.yaml
   - grafana-env-secret.yaml
+  - cloudflare-secret.yaml
