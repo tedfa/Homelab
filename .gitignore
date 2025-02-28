@@ -2,3 +2,4 @@ hosts.ini
 pingcluster.yaml
 .DS_Store
 age.agekey
+test-secret.yaml
