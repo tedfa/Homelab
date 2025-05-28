@@ -29,21 +29,25 @@ spec:
     service:
       type: NodePort
       port: 32400
-      nodePort: 32400  # This makes it accessible directly on the node IP
+      nodePort: 32400
       
-    # Persistence for Plex data
+    # Persistence for Plex config data only
     persistence:
       config:
         enabled: true
         storageClass: local-path
         size: 10Gi
         accessMode: ReadWriteOnce
-      
-      # Media storage - mount the media PVC we created
-      media:
-        enabled: true
-        existingClaim: "plex-media-pvc"
-        mountPath: "/data/media"  # This is where Plex will see your media files
+    
+    # Add media volume using extraVolumes (more universal approach)
+    extraVolumes:
+      - name: media-storage
+        persistentVolumeClaim:
+          claimName: plex-media-pvc
+    
+    extraVolumeMounts:
+      - name: media-storage
+        mountPath: /data/media
     
     # Environment variables from secret
     envFrom:
@@ -52,10 +56,8 @@ spec:
     
     # Additional environment variables
     env:
-      # Allowed networks for local access - adjust to your network range
       - name: ALLOWED_NETWORKS
         value: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
-      # Advertise IP for local network discovery - using your node's static IP
       - name: ADVERTISE_IP
         value: "http://192.168.1.90:32400/"
     
