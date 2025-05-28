@@ -30,7 +30,7 @@ spec:
       type: NodePort
       port: 32400
       nodePort: 32400  # This makes it accessible directly on the node IP
-          
+      
     # Persistence for Plex data
     persistence:
       config:
@@ -39,14 +39,11 @@ spec:
         size: 10Gi
         accessMode: ReadWriteOnce
       
-      # Media storage - you'll need to configure this based on your setup
+      # Media storage - mount the media PVC we created
       media:
         enabled: true
-        storageClass: local-path
-        size: 100Gi
-        accessMode: ReadWriteOnce
-        # Alternatively, you can use existing PVC or hostPath
-        # existingClaim: "plex-media-pvc"
+        existingClaim: "plex-media-pvc"
+        mountPath: "/data/media"  # This is where Plex will see your media files
     
     # Environment variables from secret
     envFrom:
