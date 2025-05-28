@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: plex
+  namespace: plex
+  annotations:
+    # These annotations may be needed depending on your ingress controller
+    # nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    # nginx.ingress.kubernetes.io/proxy-buffering: "off"
+spec:
+  ingressClassName: traefik  # Following your existing pattern with linkding
+  rules:
+    - host: plex.local  # You can change this to whatever local domain you prefer
+      http:
+        paths:
+          - backend:
+              service:
+                name: plex
+                port:
+                  number: 32400
+            path: /
+            pathType: Prefix

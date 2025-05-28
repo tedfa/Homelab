@@ -1,0 +1,84 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: plex
+  namespace: plex
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: plex-media-server
+      version: "0.x"
+      sourceRef:
+        kind: HelmRepository
+        name: plex
+        namespace: plex
+      interval: 12h
+  install:
+    crds: Create
+  upgrade:
+    crds: CreateReplace
+  values:
+    # Basic Plex configuration
+    image:
+      repository: plexinc/pms-docker
+      tag: latest
+      pullPolicy: IfNotPresent
+    
+    # Service configuration
+    service:
+      type: NodePort
+      port: 32400
+      nodePort: 32400  # This makes it accessible directly on the node IP
+          
+    # Persistence for Plex data
+    persistence:
+      config:
+        enabled: true
+        storageClass: local-path
+        size: 10Gi
+        accessMode: ReadWriteOnce
+      
+      # Media storage - you'll need to configure this based on your setup
+      media:
+        enabled: true
+        storageClass: local-path
+        size: 100Gi
+        accessMode: ReadWriteOnce
+        # Alternatively, you can use existing PVC or hostPath
+        # existingClaim: "plex-media-pvc"
+    
+    # Environment variables from secret
+    envFrom:
+      - secretRef:
+          name: plex-env
+    
+    # Additional environment variables
+    env:
+      # Allowed networks for local access - adjust to your network range
+      - name: ALLOWED_NETWORKS
+        value: "10.0.0.0/8,172.16.0.0/12,192.168.0.0/16"
+      # Advertise IP for local network discovery - using your node's static IP
+      - name: ADVERTISE_IP
+        value: "http://192.168.1.90:32400/"
+    
+    # Resource limits/requests
+    resources:
+      requests:
+        cpu: 1000m
+        memory: 2Gi
+      limits:
+        cpu: 4000m
+        memory: 8Gi
+    
+    # Security context
+    securityContext:
+      runAsUser: 1000
+      runAsGroup: 1000
+      fsGroup: 1000
+    
+    # Node selector if you want to run on specific nodes
+    # nodeSelector: {}
+    
+    # Tolerations if needed
+    # tolerations: []
