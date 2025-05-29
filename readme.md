@@ -7,6 +7,7 @@ So far I have implemented:
 - `mealie` - recipe manager
 - `kube-prometheus-stack` for cluster monitoring
 - CF Tunnels for external access
+- Plex Media Server
 
 ### Future Goals
 - NAS for photography storage and editing. As well as iSCSI/NFS support for the K8s cluster.
